@@ -14,7 +14,6 @@ app.use("/public", express.static(`${process.cwd()}/public`));
 // Database
 
 const urls = []
-console.log("urls", urls);
 
 // Utils
 
@@ -31,11 +30,11 @@ app.get("/", (req, res) => {
 app.post("/api/shorturl", (req, res) => {
   const url = req.body.url
 
-  if (!url) res.status(400).json({ error: 'Invalid URL' })
+  if (!url) return res.status(400).json({ error: 'Invalid URL' })
   
   const isValid = validateUrl(url)
 
-  if (!isValid) res.status(400).json({ error: 'Invalid URL' })
+  if (!isValid) return res.status(400).json({ error: 'Invalid URL' })
 
   const data = { original_url: url, short_url: urls.length + 1 }
 
@@ -49,7 +48,7 @@ app.get("/api/shorturl/:url", (req, res) => {
 
   console.log("originalUrl:", originalUrl);
 
-  res.redirect(301, originalUrl);
+  return res.redirect(301, originalUrl);
 });
 
 app.listen(port, () => {
