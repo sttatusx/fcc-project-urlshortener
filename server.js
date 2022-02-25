@@ -30,11 +30,11 @@ app.get("/", (req, res) => {
 app.post("/api/shorturl", (req, res) => {
   const url = req.body.url
 
-  if (!url) return res.status(400).json({ error: 'Invalid URL' })
+  if (!url) return res.json({ error: 'Invalid URL' })
   
   const isValid = validateUrl(url)
 
-  if (!isValid) return res.status(400).json({ error: 'Invalid URL' })
+  if (!isValid) return res.json({ error: 'Invalid URL' })
 
   const data = { original_url: url, short_url: urls.length + 1 }
 
@@ -46,9 +46,7 @@ app.get("/api/shorturl/:url", (req, res) => {
   const shortUrl = req.params.url
   const originalUrl = urls[shortUrl - 1].original_url
 
-  console.log("originalUrl:", originalUrl);
-
-  return res.redirect(301, originalUrl);
+  res.redirect(originalUrl);
 });
 
 app.listen(port, () => {
