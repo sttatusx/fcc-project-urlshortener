@@ -46,7 +46,7 @@ app.get("/api/shorturl/:url", (req, res) => {
   const shortUrl = req.params.url
   const originalUrl = urls[shortUrl - 1].original_url
 
-  res.redirect(originalUrl);
+  return res.redirect(301, originalUrl);
 });
 
 app.listen(port, () => {
