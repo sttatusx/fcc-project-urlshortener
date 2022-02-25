@@ -14,6 +14,7 @@ app.use("/public", express.static(`${process.cwd()}/public`));
 // Database
 
 const urls = []
+console.log("urls", urls);
 
 // Utils
 
@@ -45,6 +46,8 @@ app.post("/api/shorturl", (req, res) => {
 app.get("/api/shorturl/:url", (req, res) => {
   const shortUrl = req.params.url
   const originalUrl = urls[shortUrl - 1].original_url
+
+  console.log("originalUrl:", originalUrl);
 
   res.redirect(301, originalUrl);
 });
