@@ -11,6 +11,10 @@ app.use(cors());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use("/public", express.static(`${process.cwd()}/public`));
 
+// Database
+
+const urls = []
+
 // Routes
 
 app.get("/", (req, res) => {
@@ -18,11 +22,21 @@ app.get("/", (req, res) => {
 });
 
 app.post("/api/shorturl", (req, res) => {
-  res.json({ greeting: "hello API" });
+  const url = req.body.url
+
+  if (!url) res.status(400).json({ error: 'invalid url' })
+
+  const data = { original_url: url, short_url: urls.length + 1 }
+
+  urls.push(data)
+  res.status(201).json(data);
 });
 
-app.get("/api/shorturl", (req, res) => {
-  res.json({ greeting: "hello API" });
+app.get("/api/shorturl/:url", (req, res) => {
+  const shortUrl = req.params.url
+  const originalUrl = urls[shortUrl - 1].original_url
+
+  res.redirect(301, originalUrl);
 });
 
 app.listen(port, () => {
