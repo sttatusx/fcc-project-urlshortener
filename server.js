@@ -15,6 +15,12 @@ app.use("/public", express.static(`${process.cwd()}/public`));
 
 const urls = []
 
+// Utils
+
+function validateUrl(url) {
+  return RegExp(/https?:\/\//).test(url)
+}
+
 // Routes
 
 app.get("/", (req, res) => {
@@ -24,7 +30,11 @@ app.get("/", (req, res) => {
 app.post("/api/shorturl", (req, res) => {
   const url = req.body.url
 
-  if (!url) res.status(400).json({ error: 'invalid url' })
+  if (!url) res.status(400).json({ error: 'Invalid URL' })
+  
+  const isValid = validateUrl(url)
+
+  if (!isValid) res.status(400).json({ error: 'Invalid URL' })
 
   const data = { original_url: url, short_url: urls.length + 1 }
 
